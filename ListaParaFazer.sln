@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListaParaFazer", "ListaParaFazer.csproj", "{E95F8ADA-C073-49E4-B697-FBC88E10942C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E95F8ADA-C073-49E4-B697-FBC88E10942C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E95F8ADA-C073-49E4-B697-FBC88E10942C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E95F8ADA-C073-49E4-B697-FBC88E10942C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E95F8ADA-C073-49E4-B697-FBC88E10942C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0E0AACA-AA80-41A9-B352-7E9F37CB8EE5}
+	EndGlobalSection
+EndGlobal
