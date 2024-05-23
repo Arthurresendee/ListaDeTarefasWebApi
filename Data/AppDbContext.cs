@@ -1,5 +1,5 @@
 using ListaParaFazer.Data.Mapping;
-using ListaParaFazer.Models;
+using ListaParaFazer.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ListaParaFazer.Data
@@ -8,7 +8,7 @@ namespace ListaParaFazer.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<TarefaModel> Tarefas { get; set; }
+        public DbSet<TarefaModel> TB_Tarefas { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

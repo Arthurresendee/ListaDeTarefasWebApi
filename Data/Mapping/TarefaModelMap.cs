@@ -1,4 +1,5 @@
 using ListaParaFazer.Models;
+using ListaParaFazer.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ListaParaFazer.Data.Mapping
@@ -40,12 +41,14 @@ namespace ListaParaFazer.Data.Mapping
             builder.Property(c => c.DataFinal)
                 .HasColumnName("DataFinal")
                 .HasColumnType("SMALLDATETIME")
+                .HasDefaultValue(DateTime.Now.ToUniversalTime().AddDays(1))
                 .IsRequired(false);
 
             builder.Property(x => x.Realizada)
                 .HasColumnName("Realizada")
                 .HasColumnType("BIT")
-                .IsRequired();
+                .HasDefaultValue(false)
+                .IsRequired(false);
         }
     }
 }

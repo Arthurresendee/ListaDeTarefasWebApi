@@ -1,4 +1,4 @@
-namespace ListaParaFazer.Models
+namespace ListaParaFazer.Models.Entities
 {
     public class TarefaModel
     {
@@ -10,7 +10,10 @@ namespace ListaParaFazer.Models
         public DateTime? DataFinal { get; set; }
         public bool? Realizada { get; set; }
 
-        //public TarefaModel(string title,
+        //public TarefaModel() { }
+
+        //public TarefaModel(
+        //    string title,
         //    string descricao,
         //    int diasParaRealizar,
         //    DateTime dataInicial,
@@ -25,6 +28,5 @@ namespace ListaParaFazer.Models
         //    Realizada = realizada;
         //}
 
-        public TarefaModel() { }
     }
 }
