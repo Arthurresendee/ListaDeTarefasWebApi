@@ -1,17 +1,33 @@
 using System.Runtime.CompilerServices;
+using ListaParaFazer.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ListaParaFazer.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
     public class ListaParaFazer : ControllerBase
     {
         [HttpGet]
-        public IActionResult Get()
+        [Route("api")]
+        public IActionResult GetResult()
         {
+            return Ok();
+        }
 
-            return Ok("Tudo certo com nossa api!");
+        [HttpGet]
+        [Route("tarefas")]
+        public async Task<IActionResult> Get(
+            [FromServices] AppDbContext context)
+        {
+            var tarefas = await context.Tarefas.ToListAsync();
+
+            if (tarefas.Count() < 1)
+            {
+                return NoContent();
+            }
+
+            return Ok(tarefas);
         }
     }
 }
