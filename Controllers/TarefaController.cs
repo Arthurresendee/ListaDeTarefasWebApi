@@ -14,7 +14,7 @@ namespace ListaParaFazer.Controllers
     public class ListaParaFazer : ControllerBase
     {
         [HttpGet]
-        [Route("")]
+        [Route("api")]
         public IActionResult GetResult()
         {
             return Ok("Tudo certo com nossa api");
@@ -65,17 +65,35 @@ namespace ListaParaFazer.Controllers
                 DataFinal = createTarefaViewModel.DataFinal
             };
 
-            context.TB_Tarefas.Add(tarefa);
+            await context.TB_Tarefas.AddAsync(tarefa);
             context.SaveChanges();
 
             return Created($"tarefas/{tarefa.Id}", tarefa);
         }
 
-        //[HttpPost]
-        //[Route("Tarefas/{id:int}")]
-        //public async Task<IActionResult> Delete()
-        //{
+        [HttpDelete]
+        [Route("Tarefas")]
+        public async Task<IActionResult> Delete(
+            [FromServices] AppDbContext context,
+            [FromBody] DeleteTarefaViewModel deleteTarefaViewModel)
+        {
+            try
+            {
+                var tarefa = await context.TB_Tarefas.FirstOrDefaultAsync(x => x.Id == deleteTarefaViewModel.Id);
+                context.TB_Tarefas.Remove(tarefa);
+                context.SaveChanges();
 
-        //}
+                return Ok(tarefa);
+
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest("Não foi possivel encontrar uma tarefa");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "0001x - Algo deu errado!");
+            }
+        }
     }
 }
