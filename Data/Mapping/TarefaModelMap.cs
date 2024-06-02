@@ -1,4 +1,3 @@
-using ListaParaFazer.Models;
 using ListaParaFazer.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,12 +1,9 @@
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 using ListaParaFazer.Data;
 using ListaParaFazer.Models.Entities;
+using ListaParaFazer.Models.ViewModels;
 using ListaParaFazer.Models.ViewModels.Tarefa;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace ListaParaFazer.Controllers
 {
@@ -25,14 +22,22 @@ namespace ListaParaFazer.Controllers
         public async Task<IActionResult> Get(
             [FromServices] AppDbContext context)
         {
-            var tarefas = await context.TB_Tarefas.ToListAsync();
-
-            if (tarefas.Count() < 1)
+            try
             {
-                return NoContent();
-            }
+                var tarefas = await context.TB_Tarefas.ToListAsync();
 
-            return Ok(tarefas);
+                if (tarefas.Count() < 1)
+                {
+                    return NoContent();
+                }
+
+                return Ok(new ResultViewModel<List<TarefaModel>>(tarefas));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResultViewModel<List<TarefaModel>>("LG001 - Não foi possível retornar categorias."));
+            }
+            
         }
 
         [HttpGet]
