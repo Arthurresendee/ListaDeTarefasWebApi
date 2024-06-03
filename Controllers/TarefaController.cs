@@ -24,20 +24,39 @@ namespace ListaParaFazer.Controllers
         {
             try
             {
+                var tarefasViewModel = new List<ReadTarefaViewModel>();
                 var tarefas = await context.TB_Tarefas.ToListAsync();
 
-                if (tarefas.Count() < 1)
+                if (tarefas == null)
                 {
                     return NoContent();
                 }
 
-                return Ok(new ResultViewModel<List<TarefaModel>>(tarefas));
+                //O código abaixo pega a minha classe base que veio do banco e transforma na tarefa ViewModel.
+                //Assim, ao invés de eu retorna minha meu modelo base em sí, vou retornar somente que desejo.
+                //Em seguida eu adiciono cada nova classe em uma lista já instaciada.
+                foreach (var item in tarefas)
+                {
+                    var novaTarefa = new ReadTarefaViewModel()
+                    {
+                        Id = item.Id,
+                        Title = item.Title,
+                        Descricao = item.Descricao,
+                        DiasParaRealizar = item.DiasParaRealizar,
+                        DataInicial = item.DataInicial,
+                        DataFinal = item.DataFinal,
+                        Realizada = item.Realizada
+                    };
+
+                    tarefasViewModel.Add(novaTarefa);
+                }
+
+                return Ok(new ResultViewModel<List<ReadTarefaViewModel>>(tarefasViewModel));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResultViewModel<List<TarefaModel>>("LG001 - Não foi possível retornar categorias."));
+                return StatusCode(500, new ResultViewModel<List<TarefaModel>>("LPFG001 - " + ex.Message));
             }
-            
         }
 
         [HttpGet]
@@ -100,5 +119,12 @@ namespace ListaParaFazer.Controllers
                 return StatusCode(500, "0001x - Algo deu errado!");
             }
         }
-    }
+
+        //[HttpPut]
+        //[Route("Tarefas")]
+        //public async Task<IActionResult> Update(
+        //    [FromServices] AppDbContext context,
+        //    [FromBody] DeleteTarefaViewModel deleteTarefaViewModel)
+        //{
+        //}
 }
