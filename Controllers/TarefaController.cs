@@ -71,14 +71,14 @@ namespace ListaParaFazer.Controllers
 
                 if (tarefa == null)
                 {
-                    return NotFound(new ResultViewModel<TarefaModel>("Tarefa não encontrada"));
+                    return NotFound(new ResultViewModel<TarefaModel>("LPFG001 - Tarefa não encontrada"));
                 }
 
                 return Ok(new ResultViewModel<TarefaModel>(tarefa));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResultViewModel<TarefaModel>("Algo deu errado!"));
+                return StatusCode(500, new ResultViewModel<TarefaModel>($"LPFG002 - {ex.Message}"));
             }
         }
 
@@ -106,7 +106,7 @@ namespace ListaParaFazer.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResultViewModel<TarefaModel>("Algo de errado!"));
+                return StatusCode(500, new ResultViewModel<TarefaModel>($"LPFPT001 - {ex.Message}!"));
             }
         }
 
@@ -122,7 +122,7 @@ namespace ListaParaFazer.Controllers
                 var tarefa = await context.TB_Tarefas.FirstOrDefaultAsync(x => x.Id == updateTarefaViewModel.Id);
                 if (tarefa == null)
                 {
-                    return NotFound(new ResultViewModel<List<TarefaModel>>("Tarefa não encontrada"));
+                    return NotFound(new ResultViewModel<List<TarefaModel>>("LPFP001 - {Tarefa não encontrada}"));
                 }
 
                 tarefa.Title = updateTarefaViewModel.Title;
@@ -139,7 +139,7 @@ namespace ListaParaFazer.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResultViewModel<List<TarefaModel>>("LPFP001 - "+ ex.Message));
+                return StatusCode(500, new ResultViewModel<List<TarefaModel>>($"LPFP002 - {ex.Message}"));
             }
         }
 
@@ -152,19 +152,21 @@ namespace ListaParaFazer.Controllers
             try
             {
                 var tarefa = await context.TB_Tarefas.FirstOrDefaultAsync(x => x.Id == deleteTarefaViewModel.Id);
+
+                if(tarefa == null)
+                {
+                    return NotFound(new ResultViewModel<TarefaModel>("LPFD001 - Não foi possível encontrar uma tarefa!"));
+                }
+
                 context.TB_Tarefas.Remove(tarefa);
                 context.SaveChanges();
 
                 return Ok(new ResultViewModel<TarefaModel>(tarefa));
 
             }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(new ResultViewModel<TarefaModel>("Não foi possivel encontrar uma tarefa"));
-            }
             catch (Exception ex)
             {
-                return StatusCode(500, new ResultViewModel<TarefaModel>("0001x - Algo deu errado!"));
+                return StatusCode(500, new ResultViewModel<TarefaModel>($"LPFD002 - {ex.Message}"));
             }
         }
     }
