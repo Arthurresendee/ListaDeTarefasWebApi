@@ -2,18 +2,18 @@
 {
     public class ResultViewModel<T>
     {
-        public T Data { get; set; }
+        public List<T> Data { get; set; } = new();
         public List<string> Errors { get; set; } = new(); //Já inicializando a lista de erros para ela não vir como null qundo não houver erros. Sempre ela será inicializada como vazia.
 
         public ResultViewModel(T data, List<string> errors)
         {
-            Data = data;
+            Data.Add(data);
             Errors = errors;
         }
 
         public ResultViewModel(T data)
         {
-            Data = data;
+            Data.Add(data);
         }
 
         public ResultViewModel(List<string> errors)

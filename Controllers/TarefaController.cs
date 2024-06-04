@@ -65,14 +65,21 @@ namespace ListaParaFazer.Controllers
             [FromServices] AppDbContext context,
             [FromRoute] int id)
         {
-            var tarefa = await context.TB_Tarefas.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (tarefa == null)
+            try
             {
-                return NotFound("Tarefa não encontrada");
-            }
+                var tarefa = await context.TB_Tarefas.FirstOrDefaultAsync(x => x.Id == id);
 
-            return Ok(tarefa);
+                if (tarefa == null)
+                {
+                    return NotFound(new ResultViewModel<TarefaModel>("Tarefa não encontrada"));
+                }
+
+                return Ok(new ResultViewModel<TarefaModel>(tarefa));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResultViewModel<TarefaModel>("Algo deu errado!"));
+            }
         }
 
         [HttpPost]
@@ -81,18 +88,59 @@ namespace ListaParaFazer.Controllers
             [FromServices] AppDbContext context,
             [FromBody] CreateTarefaViewModel createTarefaViewModel)
         {
-            var tarefa = new TarefaModel()
+            try
             {
-                Title = createTarefaViewModel.Title,
-                Descricao = createTarefaViewModel.Descricao,
-                DiasParaRealizar = createTarefaViewModel.DiasParaRealizar,
-                DataFinal = createTarefaViewModel.DataFinal
-            };
+                var tarefa = new TarefaModel()
+                {
+                    Title = createTarefaViewModel.Title,
+                    Descricao = createTarefaViewModel.Descricao,
+                    DiasParaRealizar = createTarefaViewModel.DiasParaRealizar,
+                    DataFinal = createTarefaViewModel.DataFinal
+                };
 
-            await context.TB_Tarefas.AddAsync(tarefa);
-            context.SaveChanges();
+                await context.TB_Tarefas.AddAsync(tarefa);
+                context.SaveChanges();
 
-            return Created($"tarefas/{tarefa.Id}", tarefa);
+                return Created($"tarefas/{tarefa.Id}", new ResultViewModel<TarefaModel>(tarefa));
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResultViewModel<TarefaModel>("Algo de errado!"));
+            }
+        }
+
+
+        [HttpPut]
+        [Route("Tarefas")]
+        public async Task<IActionResult> Update(
+            [FromServices] AppDbContext context,
+            [FromBody] UpdateTarefaViewModel updateTarefaViewModel)
+        {
+            try
+            {
+                var tarefa = await context.TB_Tarefas.FirstOrDefaultAsync(x => x.Id == updateTarefaViewModel.Id);
+                if (tarefa == null)
+                {
+                    return NotFound(new ResultViewModel<List<TarefaModel>>("Tarefa não encontrada"));
+                }
+
+                tarefa.Title = updateTarefaViewModel.Title;
+                tarefa.Descricao = updateTarefaViewModel.Descricao;
+                tarefa.DiasParaRealizar = updateTarefaViewModel.DiasParaRealizar;
+                tarefa.DataInicial = updateTarefaViewModel.DataInicial;
+                tarefa.DataFinal = updateTarefaViewModel.DataFinal;
+                tarefa.Realizada = updateTarefaViewModel.Realizada;
+
+                context.TB_Tarefas.Update(tarefa);
+                context.SaveChanges();
+
+                return Created($"tarefas/{tarefa.Id}", new ResultViewModel<TarefaModel>(tarefa));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResultViewModel<List<TarefaModel>>("LPFP001 - "+ ex.Message));
+            }
         }
 
         [HttpDelete]
@@ -107,24 +155,17 @@ namespace ListaParaFazer.Controllers
                 context.TB_Tarefas.Remove(tarefa);
                 context.SaveChanges();
 
-                return Ok(tarefa);
+                return Ok(new ResultViewModel<TarefaModel>(tarefa));
 
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest("Não foi possivel encontrar uma tarefa");
+                return BadRequest(new ResultViewModel<TarefaModel>("Não foi possivel encontrar uma tarefa"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "0001x - Algo deu errado!");
+                return StatusCode(500, new ResultViewModel<TarefaModel>("0001x - Algo deu errado!"));
             }
         }
-
-        //[HttpPut]
-        //[Route("Tarefas")]
-        //public async Task<IActionResult> Update(
-        //    [FromServices] AppDbContext context,
-        //    [FromBody] DeleteTarefaViewModel deleteTarefaViewModel)
-        //{
-        //}
+    }
 }
